@@ -1,0 +1,57 @@
+<nav class="navbar">
+  <div class="logo"><span>>_</span>PyPath</div>
+  <div class="nav-links">
+    <a routerLink="/">Головна</a>
+    <a routerLink="/courses">Курси</a>
+    <a routerLink="/dashboard">Прогрес</a>
+    <a href="#">Спільнота</a>
+  </div>
+  <button class="btn-login" routerLink="/auth/login">Увійти</button>
+</nav>
+
+<div class="page">
+  <div class="course-header">
+    <div class="course-meta">КУРС</div>
+    <h1>Python + Django</h1>
+    <p class="course-sub">{{ topics.length }} тем · {{ topics.length * 10 }} уроків · ~40 годин</p>
+    <div class="progress-bar">
+      <div class="progress-fill" [style.width.%]="progress"></div>
+    </div>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-box">
+      <div class="stat-num">3/{{ topics.length }}</div>
+      <div class="stat-label">тем пройдено</div>
+    </div>
+    <div class="stat-box accent">
+      <div class="stat-num">{{ progress }}%</div>
+      <div class="stat-label">прогрес</div>
+    </div>
+  </div>
+
+  <div class="filters">
+    <button
+      *ngFor="let f of filters"
+      class="filter-btn"
+      [class.active]="activeFilter === f.id"
+      (click)="setFilter(f.id)">
+      {{ f.label }}
+    </button>
+  </div>
+
+  <div class="topic-list">
+    <div class="topic-row" *ngFor="let topic of filtered">
+      <div class="topic-icon">{{ topic.icon }}</div>
+      <div class="topic-info">
+        <div class="topic-title">{{ topic.title }}</div>
+        <div class="topic-desc">{{ topic.desc }}</div>
+      </div>
+      <div class="topic-right">
+        <span class="lessons-count">{{ topic.lessons }} уроків</span>
+        <span class="badge" [class]="topic.difficulty">{{ topic.difficulty }}</span>
+        <span class="arrow">→</span>
+      </div>
+    </div>
+  </div>
+</div>
