@@ -36,9 +36,14 @@
       <div class="lesson-content" [innerHTML]="lesson.content"></div>
 
       <div class="nav-buttons">
-        <a class="btn-outline" routerLink="/courses">← Назад до курсу</a>
-        <a class="btn-primary" [routerLink]="['/quiz', topic.id]">Наступний урок →</a>
-      </div>
+  <a class="btn-outline" routerLink="/courses">← Назад до курсу</a>
+  @if (!isLastLesson && nextLesson) {
+    <a class="btn-primary" [routerLink]="['/lesson', nextLesson.id]">Далі →</a>
+  }
+  @if (isLastLesson) {
+    <a class="btn-primary" [routerLink]="['/quiz', topic.id]">Пройти тест →</a>
+  }
+</div>
     </main>
   </div>
 }

@@ -1,30 +1,47 @@
 import { Component, OnInit } from '@angular/core';
-import { RouterLink, ActivatedRoute } from '@angular/router';
+import { RouterLink, ActivatedRoute, Router } from '@angular/router';
 import { NgIf } from '@angular/common';
 import { ApiService } from '../../../core/services/api.service';
 
 @Component({
   selector: 'app-lesson-view',
   standalone: true,
-  imports: [RouterLink, ],
+  imports: [RouterLink, NgIf],
   templateUrl: './lesson-view.component.html',
   styleUrl: './lesson-view.component.scss'
 })
 export class LessonViewComponent implements OnInit {
   lesson: any = null;
   topic: any = null;
+  nextLesson: any = null;
+  isLastLesson = false;
 
-  constructor(private api: ApiService, private route: ActivatedRoute) {}
+  constructor(private api: ApiService, private route: ActivatedRoute, private router: Router) {}
 
   ngOnInit() {
-    const id = this.route.snapshot.paramMap.get('id');
-    if (id) {
-      this.api.getLesson(+id).subscribe(lesson => {
-        this.lesson = lesson;
-        this.api.getTopic(lesson.topic).subscribe(topic => {
-          this.topic = topic;
-        });
+    this.route.paramMap.subscribe(params => {
+      const id = params.get('id');
+      if (id) {
+        this.loadLesson(+id);
+      }
+    });
+  }
+
+  loadLesson(id: number) {
+    this.api.getLesson(id).subscribe(lesson => {
+      this.lesson = lesson;
+      this.api.getTopic(lesson.topic).subscribe(topic => {
+        this.topic = topic;
+        const lessons = topic.lessons;
+        const currentIndex = lessons.findIndex((l: any) => l.id === id);
+        if (currentIndex < lessons.length - 1) {
+          this.nextLesson = lessons[currentIndex + 1];
+          this.isLastLesson = false;
+        } else {
+          this.nextLesson = null;
+          this.isLastLesson = true;
+        }
       });
-    }
+    });
   }
 }
