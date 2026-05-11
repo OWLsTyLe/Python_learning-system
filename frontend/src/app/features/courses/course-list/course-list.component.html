@@ -13,7 +13,7 @@
   <div class="course-header">
     <div class="course-meta">КУРС</div>
     <h1>Python + Django</h1>
-    <p class="course-sub">{{ topics.length }} тем · {{ topics.length * 10 }} уроків · ~40 годин</p>
+    <p class="course-sub">{{ topics.length }} тем · ~40 годин</p>
     <div class="progress-bar">
       <div class="progress-fill" [style.width.%]="progress"></div>
     </div>
@@ -31,27 +31,30 @@
   </div>
 
   <div class="filters">
-    <button
-      *ngFor="let f of filters"
-      class="filter-btn"
-      [class.active]="activeFilter === f.id"
-      (click)="setFilter(f.id)">
-      {{ f.label }}
-    </button>
+    @for (f of filters; track f.id) {
+      <button
+        class="filter-btn"
+        [class.active]="activeFilter === f.id"
+        (click)="setFilter(f.id)">
+        {{ f.label }}
+      </button>
+    }
   </div>
 
   <div class="topic-list">
-    <div class="topic-row" *ngFor="let topic of filtered">
-      <div class="topic-icon">{{ topic.icon }}</div>
-      <div class="topic-info">
-        <div class="topic-title">{{ topic.title }}</div>
-        <div class="topic-desc">{{ topic.desc }}</div>
-      </div>
-      <div class="topic-right">
-        <span class="lessons-count">{{ topic.lessons }} уроків</span>
-        <span class="badge" [class]="topic.difficulty">{{ topic.difficulty }}</span>
-        <span class="arrow">→</span>
-      </div>
+    @for (topic of filtered; track topic.id) {
+  <div class="topic-row" [routerLink]="['/lesson', topic.lessons[0]?.id]">
+    <div class="topic-icon">{{ topic.icon }}</div>
+    <div class="topic-info">
+      <div class="topic-title">{{ topic.title }}</div>
+      <div class="topic-desc">{{ topic.description }}</div>
     </div>
+    <div class="topic-right">
+      <span class="lessons-count">{{ topic.lessons_count }} уроків</span>
+      <span class="badge" [class]="topic.difficulty">{{ topic.difficulty }}</span>
+      <span class="arrow">→</span>
+    </div>
+  </div>
+}
   </div>
 </div>

@@ -1,1 +1,77 @@
-<p>dashboard-page works!</p>
+<nav class="navbar">
+  <div class="logo"><span>>_</span>PyPath</div>
+  <div class="nav-links">
+    <a routerLink="/">Головна</a>
+    <a routerLink="/courses">Курси</a>
+    <a routerLink="/dashboard">Прогрес</a>
+    <a href="#">Спільнота</a>
+  </div>
+  <button class="btn-login">Увійти</button>
+</nav>
+
+<div class="page">
+  <div class="user-header">
+    <div class="avatar">М</div>
+    <div>
+      <h2>Привіт, Максе 👋</h2>
+      <p class="user-sub">Продовжуй — ти на правильному шляху</p>
+    </div>
+  </div>
+
+  <div class="stats-grid">
+    @for (s of stats; track s.label) {
+      <div class="stat-card">
+        <div class="stat-label">{{ s.label }}</div>
+        <div class="stat-val">{{ s.icon }} {{ s.value }}</div>
+      </div>
+    }
+  </div>
+
+  <div class="main-grid">
+    <div class="left">
+      <h3>Прогрес по курсу</h3>
+      <div class="topic-progress-list">
+        @for (t of topics; track t.title) {
+          <div class="topic-progress-row">
+            <div class="topic-progress-header">
+              <span class="topic-progress-title">{{ t.title }}</span>
+              <span class="topic-progress-pct" [style.color]="t.progress === 100 ? '#22d3a5' : t.progress > 0 ? '#7c6af7' : '#64748b'">{{ t.progress }}%</span>
+            </div>
+            <div class="topic-bar">
+              <div class="topic-bar-fill"
+                   [style.width.%]="t.progress"
+                   [style.background]="t.progress === 100 ? '#22d3a5' : '#7c6af7'"></div>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+
+    <div class="right">
+      <div class="activity-box">
+        <h3>Остання активність</h3>
+        <div class="activity-list">
+          @for (a of activity; track a.text) {
+            <div class="activity-row">
+              <span class="activity-dot" [style.background]="a.color"></span>
+              <span class="activity-text">{{ a.text }}</span>
+              <span class="activity-time">{{ a.time }}</span>
+            </div>
+          }
+        </div>
+      </div>
+
+      <div class="achievements-box">
+        <h3>Досягнення</h3>
+        <div class="achievements-grid">
+          @for (a of achievements; track a.label) {
+            <div class="achievement-card">
+              <div class="achievement-icon">{{ a.icon }}</div>
+              <div class="achievement-label">{{ a.label }}</div>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

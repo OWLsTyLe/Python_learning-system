@@ -1,1 +1,48 @@
-<p>lesson-view works!</p>
+<nav class="navbar">
+  <div class="logo"><span>>_</span>PyPath</div>
+  <div class="nav-links">
+    <a routerLink="/">Головна</a>
+    <a routerLink="/courses">Курси</a>
+    <a routerLink="/dashboard">Прогрес</a>
+    <a href="#">Спільнота</a>
+  </div>
+  <button class="btn-login">Увійти</button>
+</nav>
+
+@if (lesson && topic) {
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-meta">{{ topic.title }}</div>
+      <ul class="lesson-list">
+        @for (l of topic.lessons; track l.id) {
+          <li class="lesson-item" [class.active]="l.id === lesson.id" [routerLink]="['/lesson', l.id]">
+            <span class="lesson-icon">{{ l.id === lesson.id ? '▶' : '○' }}</span>
+            <span class="lesson-title">{{ l.title }}</span>
+          </li>
+        }
+      </ul>
+      <div class="progress-box">
+        <div class="progress-label">Прогрес теми</div>
+        <div class="progress-bar">
+          <div class="progress-fill" [style.width.%]="(lesson.order / topic.lessons.length) * 100"></div>
+        </div>
+        <div class="progress-text">{{ lesson.order }} / {{ topic.lessons.length }} уроків</div>
+      </div>
+    </aside>
+
+    <main class="content">
+      <div class="lesson-meta">Урок {{ lesson.order }} · ~{{ lesson.duration_minutes }} хв</div>
+      <h1>{{ lesson.title }}</h1>
+      <div class="lesson-content" [innerHTML]="lesson.content"></div>
+
+      <div class="nav-buttons">
+        <a class="btn-outline" routerLink="/courses">← Назад до курсу</a>
+        <a class="btn-primary" [routerLink]="['/quiz', topic.id]">Наступний урок →</a>
+      </div>
+    </main>
+  </div>
+}
+
+@if (!lesson) {
+  <div class="loading">Завантаження...</div>
+}

@@ -1,16 +1,17 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import {NgFor} from '@angular/common';
+import { ApiService } from '../../../core/services/api.service';
 
 @Component({
   selector: 'app-course-list',
   standalone: true,
-  imports: [RouterLink, NgFor],
+  imports: [RouterLink],
   templateUrl: './course-list.component.html',
   styleUrl: './course-list.component.scss'
 })
-export class CourseListComponent {
+export class CourseListComponent implements OnInit {
   activeFilter = 'all';
+  topics: any[] = [];
 
   filters = [
     { id: 'all', label: 'Всі теми' },
@@ -19,16 +20,15 @@ export class CourseListComponent {
     { id: 'rest', label: 'REST API' },
   ];
 
-  topics = [
-    { id: 1, icon: '🐍', title: 'Вступ до Python', desc: 'Синтаксис, змінні, типи даних', lessons: 8, difficulty: 'Легко', tag: 'python' },
-    { id: 2, icon: '🔀', title: 'Умови та цикли', desc: 'if/else, for, while, break/continue', lessons: 6, difficulty: 'Легко', tag: 'python' },
-    { id: 3, icon: '📦', title: 'Функції та модулі', desc: 'def, lambda, *args, **kwargs', lessons: 9, difficulty: 'Середньо', tag: 'python' },
-    { id: 4, icon: '🧱', title: 'ООП в Python', desc: 'Класи, спадкування, магічні методи', lessons: 10, difficulty: 'Середньо', tag: 'python' },
-    { id: 5, icon: '🌐', title: 'Django основи', desc: 'MTV, URL routing, views, templates', lessons: 12, difficulty: 'Середньо', tag: 'django' },
-    { id: 6, icon: '🗄️', title: 'Django ORM', desc: 'Моделі, міграції, QuerySet', lessons: 10, difficulty: 'Середньо', tag: 'django' },
-    { id: 7, icon: '🔐', title: 'Аутентифікація', desc: 'User model, login, JWT, permissions', lessons: 8, difficulty: 'Складно', tag: 'django' },
-    { id: 8, icon: '🚀', title: 'REST API + DRF', desc: 'Serializers, ViewSets, тести, Docker', lessons: 14, difficulty: 'Складно', tag: 'rest' },
-  ];
+  constructor(private api: ApiService) {}
+
+  ngOnInit() {
+    this.api.getCourses().subscribe(courses => {
+      if (courses.length > 0) {
+        this.topics = courses[0].topics;
+      }
+    });
+  }
 
   get filtered() {
     if (this.activeFilter === 'all') return this.topics;
@@ -40,6 +40,6 @@ export class CourseListComponent {
   }
 
   get progress() {
-    return Math.round((3 / this.topics.length) * 100);
+    return this.topics.length ? Math.round((3 / this.topics.length) * 100) : 0;
   }
 }
