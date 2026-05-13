@@ -1,5 +1,6 @@
 from django.db import models
 from ckeditor.fields import RichTextField
+from markdownx.models import MarkdownxField
 
 
 class Course(models.Model):
@@ -39,7 +40,7 @@ class Topic(models.Model):
 class Lesson(models.Model):
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE, related_name='lessons')
     title = models.CharField(max_length=200)
-    content = RichTextField()
+    content = MarkdownxField()
     order = models.PositiveIntegerField(default=0)
     duration_minutes = models.PositiveIntegerField(default=10)
 

@@ -1,4 +1,5 @@
 from django.contrib import admin
+from markdownx.admin import MarkdownxModelAdmin
 from .models import Course, Topic, Lesson
 
 
@@ -26,5 +27,5 @@ class TopicAdmin(admin.ModelAdmin):
 
 
 @admin.register(Lesson)
-class LessonAdmin(admin.ModelAdmin):
+class LessonAdmin(MarkdownxModelAdmin):
     list_display = ['title', 'topic', 'order', 'duration_minutes']

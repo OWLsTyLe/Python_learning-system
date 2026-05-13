@@ -10,14 +10,20 @@ class LessonSerializer(serializers.ModelSerializer):
 class TopicSerializer(serializers.ModelSerializer):
     lessons = LessonSerializer(many=True, read_only=True)
     lessons_count = serializers.SerializerMethodField()
+    quiz_id = serializers.SerializerMethodField()
 
     class Meta:
         model = Topic
-        fields = ['id', 'title', 'description', 'icon', 'order', 'difficulty', 'lessons_count', 'lessons']
+        fields = ['id', 'title', 'description', 'icon', 'order', 'difficulty', 'lessons_count', 'lessons', 'quiz_id']
 
     def get_lessons_count(self, obj):
         return obj.lessons.count()
 
+    def get_quiz_id(self, obj):
+        try:
+            return obj.quiz.id
+        except:
+            return None
 
 class CourseSerializer(serializers.ModelSerializer):
     topics = TopicSerializer(many=True, read_only=True)
