@@ -1,38 +1,40 @@
-import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { RouterLink, ActivatedRoute } from '@angular/router';
+import { NgIf } from '@angular/common';
+import { ApiService } from '../../../core/services/api.service';
 
 @Component({
   selector: 'app-quiz-view',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, NgIf],
   templateUrl: './quiz-view.component.html',
   styleUrl: './quiz-view.component.scss'
 })
-export class QuizViewComponent {
-  currentQuestion = 1;
-  totalQuestions = 5;
+export class QuizViewComponent implements OnInit {
+  quiz: any = null;
+  currentIndex = 0;
   selectedAnswer: number | null = null;
   showExplanation = false;
-  timeLeft = '08:42';
 
-  question = {
-    text: 'Що виведе наступний код?',
-    code: [
-      { type: 'kw', text: 'class' }, { type: 'plain', text: ' ' },
-      { type: 'cls', text: 'Animal' }, { type: 'plain', text: ':' },
-    ]
-  };
+  constructor(private api: ApiService, private route: ActivatedRoute) {}
 
-  answers = [
-    { id: 1, label: 'A', text: 'Animal.speak()' },
-    { id: 2, label: 'B', text: 'Я Кіт' },
-    { id: 3, label: 'C', text: 'Кіт.name' },
-    { id: 4, label: 'D', text: 'TypeError' },
-  ];
+  ngOnInit() {
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.api.getQuiz(+id).subscribe(quiz => {
+        this.quiz = quiz;
+      });
+    }
+  }
 
-  correctAnswer = 2;
+  get currentQuestion() {
+    return this.quiz?.questions[this.currentIndex];
+  }
 
-  explanation = 'Метод speak() повертає рядок. При виклику Python підставляє імʼя з атрибута self.name.';
+  get progress() {
+    if (!this.quiz) return 0;
+    return ((this.currentIndex + 1) / this.quiz.questions.length) * 100;
+  }
 
   selectAnswer(id: number) {
     if (this.showExplanation) return;
@@ -40,7 +42,19 @@ export class QuizViewComponent {
     this.showExplanation = true;
   }
 
-  get progress() {
-    return (this.currentQuestion / this.totalQuestions) * 100;
+  get correctAnswerId() {
+    return this.currentQuestion?.answers.find((a: any) => a.is_correct)?.id;
+  }
+
+  nextQuestion() {
+    if (this.currentIndex < this.quiz.questions.length - 1) {
+      this.currentIndex++;
+      this.selectedAnswer = null;
+      this.showExplanation = false;
+    }
+  }
+
+  get isLastQuestion() {
+    return this.quiz && this.currentIndex === this.quiz.questions.length - 1;
   }
 }

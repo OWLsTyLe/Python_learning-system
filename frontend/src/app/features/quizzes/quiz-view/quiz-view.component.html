@@ -1,4 +1,3 @@
-
 <nav class="navbar">
   <div class="logo"><span>>_</span>PyPath</div>
   <div class="nav-links">
@@ -10,59 +9,64 @@
   <button class="btn-login">Увійти</button>
 </nav>
 
-<div class="page">
-  <div class="quiz-header">
-    <div class="quiz-meta">ТЕСТ · ТЕМА 4 · ООП</div>
-    <div class="timer">🕐 {{ timeLeft }}</div>
-  </div>
+@if (!quiz) {
+  <div class="loading">Завантаження...</div>
+}
 
-  <div class="progress-bar">
-    <div class="progress-fill" [style.width.%]="progress"></div>
-  </div>
-
-  <div class="question-num">Питання {{ currentQuestion }} з {{ totalQuestions }}</div>
-  <h1>{{ question.text }}</h1>
-
-  <div class="code-window">
-    <div class="code-lines">
-      <div class="line"><span class="kw">class</span> <span class="cls">Animal</span>:</div>
-      <div class="line">&nbsp;&nbsp;<span class="kw">def</span> <span class="fn">__init__</span>(self, name):</div>
-      <div class="line">&nbsp;&nbsp;&nbsp;&nbsp;self.name = name</div>
-      <div class="line">&nbsp;&nbsp;<span class="kw">def</span> <span class="fn">speak</span>(self):</div>
-      <div class="line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">return</span> <span class="str">"Я Кіт"</span></div>
-      <div class="line">a = <span class="cls">Animal</span>(<span class="str">"Кіт"</span>)</div>
-      <div class="line"><span class="fn">print</span>(a.<span class="fn">speak</span>())</div>
+@if (quiz && currentQuestion) {
+  <div class="page">
+    <div class="quiz-header">
+      <div class="quiz-meta">ТЕСТ · {{ quiz.title }}</div>
+      <div class="timer">⏱ {{ quiz.time_limit_minutes }} хв</div>
     </div>
-  </div>
 
-  <div class="answers">
-    @for (answer of answers; track answer.id) {
-      <div class="answer-row"
-           [class.correct]="showExplanation && answer.id === correctAnswer"
-           [class.wrong]="showExplanation && selectedAnswer === answer.id && answer.id !== correctAnswer"
-           [class.selected]="selectedAnswer === answer.id"
-           (click)="selectAnswer(answer.id)">
-        <span class="answer-label">{{ answer.label }}</span>
-        <span class="answer-text">{{ answer.text }}</span>
-        @if (showExplanation && answer.id === correctAnswer) {
-          <span class="answer-icon">✓</span>
+    <div class="progress-bar">
+      <div class="progress-fill" [style.width.%]="progress"></div>
+    </div>
+
+    <div class="question-num">Питання {{ currentIndex + 1 }} з {{ quiz.questions.length }}</div>
+    <h1>{{ currentQuestion.text }}</h1>
+
+    @if (currentQuestion.code_snippet) {
+      <div class="code-window">
+        <div class="code-lines">
+          <div class="line">{{ currentQuestion.code_snippet }}</div>
+        </div>
+      </div>
+    }
+
+    <div class="answers">
+      @for (answer of currentQuestion.answers; track answer.id) {
+        <div class="answer-row"
+             [class.correct]="showExplanation && answer.id === correctAnswerId"
+             [class.wrong]="showExplanation && selectedAnswer === answer.id && answer.id !== correctAnswerId"
+             (click)="selectAnswer(answer.id)">
+          <span class="answer-text">{{ answer.text }}</span>
+          @if (showExplanation && answer.id === correctAnswerId) {
+            <span class="answer-icon">✓</span>
+          }
+          @if (showExplanation && selectedAnswer === answer.id && answer.id !== correctAnswerId) {
+            <span class="answer-icon wrong-icon">✗</span>
+          }
+        </div>
+      }
+    </div>
+
+    @if (showExplanation && currentQuestion.explanation) {
+      <div class="explanation">
+        <strong>Пояснення:</strong> {{ currentQuestion.explanation }}
+      </div>
+    }
+
+    @if (showExplanation) {
+      <div class="next-row">
+        @if (!isLastQuestion) {
+          <button class="btn-primary" (click)="nextQuestion()">Далі →</button>
         }
-        @if (showExplanation && selectedAnswer === answer.id && answer.id !== correctAnswer) {
-          <span class="answer-icon wrong-icon">✗</span>
+        @if (isLastQuestion) {
+          <a class="btn-primary" routerLink="/dashboard">Завершити тест →</a>
         }
       </div>
     }
   </div>
-
-  @if (showExplanation) {
-    <div class="explanation">
-      <strong>Пояснення:</strong> {{ explanation }}
-    </div>
-  }
-
-  @if (showExplanation) {
-    <div class="next-row">
-      <a class="btn-primary" routerLink="/dashboard">Наступне питання →</a>
-    </div>
-  }
-</div>
+}

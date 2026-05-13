@@ -25,4 +25,7 @@ export class ApiService {
   getTopic(id: number): Observable<any> {
     return this.http.get<any>(`${this.baseUrl}/topics/${id}/`);
   }
+  getQuiz(id: number): Observable<any> {
+  return this.http.get<any>(`${this.baseUrl}/quizzes/${id}/`);
+}
 }
