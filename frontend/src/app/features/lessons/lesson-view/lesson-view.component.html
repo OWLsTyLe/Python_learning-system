@@ -30,20 +30,23 @@
       </div>
     </aside>
 
-    <main class="content">
+    <main class="main">
       <div class="lesson-meta">Урок {{ lesson.order }} · ~{{ lesson.duration_minutes }} хв</div>
       <h1>{{ lesson.title }}</h1>
-      <div class="lesson-content" [innerHTML]="lesson.content"></div>
+
+      <div class="content-block">
+        <markdown class="lesson-content" [data]="lesson.content"></markdown>
+      </div>
 
       <div class="nav-buttons">
-  <a class="btn-outline" routerLink="/courses">← Назад до курсу</a>
-  @if (!isLastLesson && nextLesson) {
-    <a class="btn-primary" [routerLink]="['/lesson', nextLesson.id]">Далі →</a>
-  }
-  @if (isLastLesson) {
-    <a class="btn-primary" [routerLink]="['/quiz', topic.id]">Пройти тест →</a>
-  }
-</div>
+        <a class="btn-outline" routerLink="/courses">← Назад до курсу</a>
+        @if (!isLastLesson && nextLesson) {
+          <a class="btn-primary" [routerLink]="['/lesson', nextLesson.id]">Далі →</a>
+        }
+        @if (isLastLesson) {
+          <a class="btn-primary" [routerLink]="['/quiz', topic.quiz_id]">Пройти тест →</a>
+        }
+      </div>
     </main>
   </div>
 }
