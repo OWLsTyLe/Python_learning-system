@@ -1,1 +1,37 @@
-<p>login works!</p>
+<div class="auth-wrapper">
+  <canvas class="code-bg" #codeCanvas></canvas>
+
+  <nav class="navbar">
+    <div class="logo"><span>>_</span>PyPath</div>
+    <div class="nav-links">
+      <a routerLink="/">Головна</a>
+      <a routerLink="/courses">Курси</a>
+    </div>
+  </nav>
+
+  <div class="auth-page">
+    <div class="auth-card">
+      <div class="card-logo"><span>>_</span>PyPath</div>
+      <h1>Увійти</h1>
+      <p class="subtitle">Раді бачити тебе знову</p>
+
+      @if (error) {
+        <div class="error">{{ error }}</div>
+      }
+
+      <div class="field">
+        <label>Email</label>
+        <input type="email" [(ngModel)]="email" placeholder="your@email.com">
+      </div>
+
+      <div class="field">
+        <label>Пароль</label>
+        <input type="password" [(ngModel)]="password" placeholder="••••••••">
+      </div>
+
+      <button class="btn-primary" (click)="onSubmit()">Увійти</button>
+
+      <p class="switch">Немає акаунту? <a routerLink="/auth/register">Зареєструватись</a></p>
+    </div>
+  </div>
+</div>
