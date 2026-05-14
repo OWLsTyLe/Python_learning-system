@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterLink, ActivatedRoute, Router } from '@angular/router';
-import { NgIf } from '@angular/common';
 import { MarkdownComponent } from 'ngx-markdown';
 import { ApiService } from '../../../core/services/api.service';
+import { AuthService } from '../../../core/services/auth.service';
 import hljs from 'highlight.js';
 
 @Component({
   selector: 'app-lesson-view',
   standalone: true,
-  imports: [RouterLink, NgIf, MarkdownComponent],
+  imports: [RouterLink, MarkdownComponent],
   templateUrl: './lesson-view.component.html',
   styleUrl: './lesson-view.component.scss'
 })
@@ -18,24 +18,39 @@ export class LessonViewComponent implements OnInit {
   nextLesson: any = null;
   isLastLesson = false;
   codeHighlighted = false;
+  user: any = null;
 
   constructor(
     private api: ApiService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private auth: AuthService
   ) {}
 
   ngOnInit() {
+    this.auth.user$.subscribe(user => this.user = user);
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
       if (id) this.loadLesson(+id);
     });
   }
 
+  logout() {
+    this.auth.logout();
+  }
+
   loadLesson(id: number) {
     this.api.getLesson(id).subscribe(lesson => {
       this.lesson = lesson;
       this.codeHighlighted = false;
+
+      // ✅ Зберігаємо прогрес
+      if (this.auth.isLoggedIn) {
+        this.api.completeLesson(id, lesson.topic).subscribe({
+          error: (err) => console.error('completeLesson error:', err)
+        });
+      }
+
       this.api.getTopic(lesson.topic).subscribe(topic => {
         this.topic = topic;
         const lessons = topic.lessons;

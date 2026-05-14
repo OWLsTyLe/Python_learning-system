@@ -6,7 +6,15 @@
     <a routerLink="/dashboard">Прогрес</a>
     <a href="#">Спільнота</a>
   </div>
-  <button class="btn-login" routerLink="/auth/login">Увійти</button>
+  @if (user) {
+    <div class="user-menu">
+      <span class="username">{{ user.username }}</span>
+      <button class="btn-logout" (click)="logout()">Вийти</button>
+    </div>
+  }
+  @if (!user) {
+    <a class="btn-login" routerLink="/auth/login">Увійти</a>
+  }
 </nav>
 
 <div class="page">

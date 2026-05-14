@@ -6,14 +6,21 @@
     <a routerLink="/dashboard">Прогрес</a>
     <a href="#">Спільнота</a>
   </div>
-  <button class="btn-login">Увійти</button>
+  @if (user) {
+    <div class="user-menu">
+      <span class="username">{{ user.username }}</span>
+      <button class="btn-logout" (click)="logout()">Вийти</button>
+    </div>
+  }
+  @if (!user) {
+    <a class="btn-login" routerLink="/auth/login">Увійти</a>
+  }
 </nav>
-
 <div class="page">
   <div class="user-header">
     <div class="avatar">М</div>
     <div>
-      <h2>Привіт, Максе 👋</h2>
+      <h2>Привіт, {{ username }} 👋</h2>
       <p class="user-sub">Продовжуй — ти на правильному шляху</p>
     </div>
   </div>
@@ -65,11 +72,11 @@
         <h3>Досягнення</h3>
         <div class="achievements-grid">
           @for (a of achievements; track a.label) {
-            <div class="achievement-card">
-              <div class="achievement-icon">{{ a.icon }}</div>
-              <div class="achievement-label">{{ a.label }}</div>
-            </div>
-          }
+  <div class="achievement-card" [class.locked]="!a.unlocked">
+    <div class="achievement-icon">{{ a.icon }}</div>
+    <div class="achievement-label">{{ a.label }}</div>
+  </div>
+}
         </div>
       </div>
     </div>
