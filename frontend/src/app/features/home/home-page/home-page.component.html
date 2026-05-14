@@ -6,7 +6,15 @@
     <a routerLink="/dashboard">Прогрес</a>
     <a href="#">Спільнота</a>
   </div>
-  <button class="btn-login" routerLink="/auth/login">Увійти</button>
+  @if (user) {
+    <div class="user-menu">
+      <span class="username">{{ user.username }}</span>
+      <button class="btn-logout" (click)="logout()">Вийти</button>
+    </div>
+  }
+  @if (!user) {
+    <a class="btn-login" routerLink="/auth/login">Увійти</a>
+  }
 </nav>
 
 <div class="hero">
@@ -48,22 +56,10 @@
       <span class="dot red"></span>
       <span class="dot yellow"></span>
       <span class="dot green"></span>
-      <span class="filename">views.py</span>
+      <span class="filename">{{ currentFilename }}</span>
     </div>
-    <div class="code-lines">
-      <div class="line"> <span class="kw">from</span> django.views <span class="kw">import </span> <span class="cls">View </span></div>
-      <div class="line"><span class="kw">from</span> .models <span class="kw">import </span> <span class="cls">Course </span></div>
-      <div class="line">&nbsp;</div>
-      <div class="line"><span class="kw">class</span> <span class="fn">CourseListView</span>(<span class="cls">View</span>):</div>
-      <div class="line">&nbsp;&nbsp;<span class="kw">def</span> <span class="fn">get</span>(self, request):</div>
-      <div class="line">&nbsp;&nbsp;&nbsp;&nbsp;courses = <span class="cls">Course</span>.objects</div>
-      <div class="line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<span class="fn">filter</span>(is_published=<span class="kw">True</span>)</div>
-      <div class="line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.<span class="fn">order_by</span>(<span class="str">'-created_at'</span>)</div>
-      <div class="line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="cm"># Повертаємо JSON</span></div>
-      <div class="line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">return</span> <span class="fn">JsonResponse</span>(&#123;</div>
-      <div class="line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="str">'courses'</span>: list(courses),</div>
-      <div class="line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="str">'total'</span>: courses.<span class="fn">count</span>()</div>
-      <div class="line">&nbsp;&nbsp;&nbsp;&nbsp;&#125;)</div>
+    <div class="canvas-wrap">
+      <canvas #codeCanvas></canvas>
     </div>
   </div>
 </div>
