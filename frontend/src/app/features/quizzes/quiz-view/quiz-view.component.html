@@ -6,7 +6,15 @@
     <a routerLink="/dashboard">Прогрес</a>
     <a href="#">Спільнота</a>
   </div>
-  <button class="btn-login">Увійти</button>
+  @if (user) {
+    <div class="user-menu">
+      <span class="username">{{ user.username }}</span>
+      <button class="btn-logout" (click)="logout()">Вийти</button>
+    </div>
+  }
+  @if (!user) {
+    <a class="btn-login" routerLink="/auth/login">Увійти</a>
+  }
 </nav>
 
 @if (!quiz) {
@@ -64,7 +72,7 @@
           <button class="btn-primary" (click)="nextQuestion()">Далі →</button>
         }
         @if (isLastQuestion) {
-          <a class="btn-primary" routerLink="/dashboard">Завершити тест →</a>
+          <button class="btn-primary" (click)="finishQuiz()">Завершити тест →</button>
         }
       </div>
     }

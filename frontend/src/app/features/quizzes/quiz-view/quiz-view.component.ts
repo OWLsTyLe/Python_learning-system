@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { RouterLink, ActivatedRoute } from '@angular/router';
-import { NgIf } from '@angular/common';
+import { RouterLink, ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from '../../../core/services/api.service';
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-quiz-view',
   standalone: true,
-  imports: [RouterLink, NgIf],
+  imports: [RouterLink],
   templateUrl: './quiz-view.component.html',
   styleUrl: './quiz-view.component.scss'
 })
@@ -15,10 +15,20 @@ export class QuizViewComponent implements OnInit {
   currentIndex = 0;
   selectedAnswer: number | null = null;
   showExplanation = false;
+  user: any = null;
 
-  constructor(private api: ApiService, private route: ActivatedRoute) {}
+  correctCount = 0;
+  quizFinished = false;
+
+  constructor(
+    private api: ApiService,
+    private route: ActivatedRoute,
+    private auth: AuthService,
+    private router: Router,
+  ) {}
 
   ngOnInit() {
+    this.auth.user$.subscribe(user => this.user = user);
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.api.getQuiz(+id).subscribe(quiz => {
@@ -40,6 +50,10 @@ export class QuizViewComponent implements OnInit {
     if (this.showExplanation) return;
     this.selectedAnswer = id;
     this.showExplanation = true;
+
+    if (id === this.correctAnswerId) {
+      this.correctCount++;
+    }
   }
 
   get correctAnswerId() {
@@ -56,5 +70,27 @@ export class QuizViewComponent implements OnInit {
 
   get isLastQuestion() {
     return this.quiz && this.currentIndex === this.quiz.questions.length - 1;
+  }
+
+  finishQuiz() {
+    if (this.quizFinished) return;
+    this.quizFinished = true;
+
+    const total = this.quiz.questions.length;
+    const score = this.correctCount;
+    const quizId = this.quiz.id;
+    const topicId = this.quiz.topic_id ?? this.quiz.topic;
+
+    this.api.completeQuiz(quizId, topicId, score, total).subscribe({
+      next: () => this.router.navigate(['/dashboard']),
+      error: (err) => {
+        console.error('Помилка збереження тесту:', err);
+        this.router.navigate(['/dashboard']);
+      },
+    });
+  }
+
+  logout() {
+    this.auth.logout();
   }
 }

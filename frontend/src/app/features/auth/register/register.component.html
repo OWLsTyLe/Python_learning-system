@@ -1,1 +1,42 @@
-<p>register works!</p>
+<nav class="navbar">
+  <div class="logo"><span>>_</span>PyPath</div>
+  <div class="nav-links">
+    <a routerLink="/">Головна</a>
+    <a routerLink="/courses">Курси</a>
+  </div>
+</nav>
+<canvas #codeCanvas class="code-canvas"></canvas>
+<div class="auth-page">
+  <div class="auth-card">
+    <h1>Реєстрація</h1>
+    <p class="subtitle">Почни вчитися безкоштовно</p>
+
+    @if (error) {
+      <div class="error">{{ error }}</div>
+    }
+
+    <div class="field">
+      <label>Імʼя користувача</label>
+      <input type="text" [(ngModel)]="username" placeholder="max123">
+    </div>
+
+    <div class="field">
+      <label>Email</label>
+      <input type="email" [(ngModel)]="email" placeholder="your@email.com">
+    </div>
+
+    <div class="field">
+      <label>Пароль</label>
+      <input type="password" [(ngModel)]="password" placeholder="мінімум 8 символів">
+    </div>
+
+    <div class="field">
+      <label>Повтори пароль</label>
+      <input type="password" [(ngModel)]="password2" placeholder="••••••••">
+    </div>
+
+    <button class="btn-primary" (click)="onSubmit()">Зареєструватись</button>
+
+    <p class="switch">Вже є акаунт? <a routerLink="/auth/login">Увійти</a></p>
+  </div>
+</div>
