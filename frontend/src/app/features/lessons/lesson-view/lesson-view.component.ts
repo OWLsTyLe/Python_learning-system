@@ -3,6 +3,7 @@ import { RouterLink, ActivatedRoute, Router } from '@angular/router';
 import { MarkdownComponent } from 'ngx-markdown';
 import { ApiService } from '../../../core/services/api.service';
 import { AuthService } from '../../../core/services/auth.service';
+import { ThemeService } from '../../../core/services/theme.service';
 import hljs from 'highlight.js';
 
 @Component({
@@ -19,20 +20,27 @@ export class LessonViewComponent implements OnInit {
   isLastLesson = false;
   codeHighlighted = false;
   user: any = null;
+  isDark = true;
 
   constructor(
     private api: ApiService,
     private route: ActivatedRoute,
     private router: Router,
-    private auth: AuthService
+    private auth: AuthService,
+    private theme: ThemeService
   ) {}
 
   ngOnInit() {
     this.auth.user$.subscribe(user => this.user = user);
+    this.theme.isDark$.subscribe(dark => this.isDark = dark);
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
       if (id) this.loadLesson(+id);
     });
+  }
+
+  toggleTheme() {
+    this.theme.toggle();
   }
 
   logout() {
@@ -44,7 +52,6 @@ export class LessonViewComponent implements OnInit {
       this.lesson = lesson;
       this.codeHighlighted = false;
 
-      // ✅ Зберігаємо прогрес
       if (this.auth.isLoggedIn) {
         this.api.completeLesson(id, lesson.topic).subscribe({
           error: (err) => console.error('completeLesson error:', err)

@@ -1,7 +1,8 @@
-import { Component, OnInit, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, AfterViewInit, HostBinding } from '@angular/core';
 import { RouterLink, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../../core/services/auth.service';
+import { ThemeService } from '../../../core/services/theme.service';
 
 @Component({
   selector: 'app-login',
@@ -12,10 +13,12 @@ import { AuthService } from '../../../core/services/auth.service';
 })
 export class LoginComponent implements OnInit, AfterViewInit {
   @ViewChild('codeCanvas') canvasRef!: ElementRef<HTMLCanvasElement>;
+  @HostBinding('class.light') get isLight() { return !this.isDark; }
 
   email = '';
   password = '';
   error = '';
+  isDark = true;
 
   private codeBlocks = [
     { lines: [
@@ -58,12 +61,22 @@ export class LoginComponent implements OnInit, AfterViewInit {
   private currentChar = 0;
   private displayLines: { text: string; color: string; done: boolean }[] = [];
 
-  constructor(private auth: AuthService, private router: Router) {}
+  constructor(
+    private auth: AuthService,
+    private router: Router,
+    private theme: ThemeService,
+  ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.theme.isDark$.subscribe(dark => this.isDark = dark);
+  }
 
   ngAfterViewInit() {
     this.typeCode();
+  }
+
+  toggleTheme() {
+    this.theme.toggle();
   }
 
   typeCode() {
@@ -89,8 +102,8 @@ export class LoginComponent implements OnInit, AfterViewInit {
       this.displayLines.forEach((line, i) => {
         if (!line.text) return;
         ctx.font = `${fontSize}px JetBrains Mono, monospace`;
-        ctx.fillStyle = line.color || '#e2e8f0';
-        ctx.globalAlpha = line.done ? 0.30 : 1;
+        ctx.fillStyle = this.isDark ? (line.color || '#e2e8f0') : (line.color || '#1e293b');
+        ctx.globalAlpha = line.done ? 0.15 : (this.isDark ? 0.6 : 0.25);
         ctx.fillText(line.text, startX, startY + i * lineHeight);
       });
 

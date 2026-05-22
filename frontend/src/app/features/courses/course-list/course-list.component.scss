@@ -3,9 +3,10 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 :host {
+  transition: background-color 0.3s, color 0.3s;
   display: block;
-  background: #0d0f14;
-  color: #e2e8f0;
+  background: var(--bg);
+  color: var(--text);
   font-family: 'Manrope', sans-serif;
   min-height: 100vh;
 }
@@ -16,30 +17,80 @@
   justify-content: space-between;
   padding: 0 48px;
   height: 60px;
-  border-bottom: 1px solid rgba(255,255,255,0.07);
+  border-bottom: 1px solid var(--border);
+  background: var(--navbar-bg);
+  backdrop-filter: blur(10px);
+  position: sticky;
+  top: 0;
+  z-index: 100;
 
   .logo {
     font-family: 'JetBrains Mono', monospace;
     font-size: 18px;
     font-weight: 700;
-    color: #fff;
-    span { color: #7c6af7; }
+    color: var(--text);
+    span { color: var(--accent); }
   }
 
   .nav-links {
     display: flex;
     gap: 32px;
-    a { color: #94a3b8; font-size: 14px; text-decoration: none; font-weight: 500; }
+    a { color: var(--text-muted); font-size: 14px; text-decoration: none; font-weight: 500; }
   }
 
   .btn-login {
-    background: #7c6af7;
+    background: var(--accent);
     color: #fff;
     border: none;
     padding: 8px 20px;
     border-radius: 8px;
     font-size: 14px;
     font-weight: 600;
+    cursor: pointer;
+    font-family: 'Manrope', sans-serif;
+    text-decoration: none;
+  }
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.theme-toggle {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text);
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.2s, color 0.2s;
+
+  &:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+}
+
+.user-menu {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  .username { font-size: 14px; color: var(--text); font-weight: 600; }
+
+  .btn-logout {
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 14px;
     cursor: pointer;
     font-family: 'Manrope', sans-serif;
   }
@@ -55,7 +106,7 @@
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 2px;
-  color: #7c6af7;
+  color: var(--accent);
   text-transform: uppercase;
   margin-bottom: 8px;
 }
@@ -63,25 +114,25 @@
 h1 {
   font-size: 36px;
   font-weight: 800;
-  color: #fff;
+  color: var(--text);
   margin-bottom: 8px;
 }
 
 .course-sub {
   font-size: 14px;
-  color: #64748b;
+  color: var(--text-dim);
   margin-bottom: 20px;
 }
 
 .progress-bar {
   height: 4px;
-  background: rgba(255,255,255,0.08);
+  background: var(--border);
   border-radius: 2px;
   margin-bottom: 32px;
 
   .progress-fill {
     height: 100%;
-    background: #7c6af7;
+    background: var(--accent);
     border-radius: 2px;
     transition: width 0.3s ease;
   }
@@ -94,17 +145,17 @@ h1 {
   justify-content: flex-end;
 
   .stat-box {
-    background: #131720;
-    border: 1px solid rgba(255,255,255,0.07);
+    background: var(--bg-card);
+    border: 1px solid var(--border);
     border-radius: 10px;
     padding: 16px 24px;
     text-align: center;
     min-width: 100px;
 
-    .stat-num { font-size: 22px; font-weight: 800; color: #7c6af7; }
-    .stat-label { font-size: 12px; color: #64748b; margin-top: 4px; }
+    .stat-num { font-size: 22px; font-weight: 800; color: var(--accent); }
+    .stat-label { font-size: 12px; color: var(--text-dim); margin-top: 4px; }
 
-    &.accent .stat-num { color: #22d3a5; }
+    &.accent .stat-num { color: var(--green); }
   }
 }
 
@@ -115,8 +166,8 @@ h1 {
 
   .filter-btn {
     background: transparent;
-    border: 1px solid rgba(255,255,255,0.1);
-    color: #94a3b8;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
     padding: 8px 18px;
     border-radius: 20px;
     font-size: 14px;
@@ -126,9 +177,14 @@ h1 {
     transition: all 0.2s;
 
     &.active {
-      background: #7c6af7;
-      border-color: #7c6af7;
+      background: var(--accent);
+      border-color: var(--accent);
       color: #fff;
+    }
+
+    &:not(.active):hover {
+      border-color: var(--accent-border);
+      color: var(--text);
     }
   }
 }
@@ -143,21 +199,24 @@ h1 {
   display: flex;
   align-items: center;
   gap: 16px;
-  background: #131720;
-  border: 1px solid rgba(255,255,255,0.07);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
   border-radius: 12px;
   padding: 20px 24px;
   cursor: pointer;
-  transition: border-color 0.2s;
+  transition: border-color 0.2s, background 0.2s;
 
-  &:hover { border-color: rgba(124,106,247,0.4); }
+  &:hover {
+    border-color: var(--accent-border);
+    background: var(--bg-card-hover);
+  }
 
   .topic-icon { font-size: 28px; width: 44px; text-align: center; }
 
   .topic-info {
     flex: 1;
-    .topic-title { font-size: 15px; font-weight: 700; color: #e2e8f0; margin-bottom: 4px; }
-    .topic-desc { font-size: 13px; color: #64748b; }
+    .topic-title { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+    .topic-desc { font-size: 13px; color: var(--text-dim); }
   }
 
   .topic-right {
@@ -165,7 +224,7 @@ h1 {
     align-items: center;
     gap: 12px;
 
-    .lessons-count { font-size: 13px; color: #64748b; }
+    .lessons-count { font-size: 13px; color: var(--text-dim); }
 
     .badge {
       padding: 4px 12px;
@@ -173,29 +232,12 @@ h1 {
       font-size: 12px;
       font-weight: 600;
 
-      &.Легко { background: rgba(34,211,165,0.12); color: #22d3a5; }
-      &.Середньо { background: rgba(124,106,247,0.12); color: #a89cf8; }
-      &.Складно { background: rgba(239,68,68,0.12); color: #f87171; }
+      &.Легко    { background: var(--badge-green-bg);   color: var(--badge-green-text); }
+      &.Середньо { background: var(--badge-purple-bg);  color: var(--badge-purple-text); }
+      &.Складно  { background: var(--badge-red-bg);     color: var(--badge-red-text); }
     }
 
-    .arrow { color: #475569; font-size: 16px; }
+    .arrow { color: var(--text-dimmer); font-size: 16px; }
   }
 }
-.user-menu {
-  display: flex;
-  align-items: center;
-  gap: 12px;
 
-  .username { font-size: 14px; color: #e2e8f0; font-weight: 600; }
-
-  .btn-logout {
-    background: transparent;
-    color: #94a3b8;
-    border: 1px solid rgba(255,255,255,0.1);
-    padding: 8px 16px;
-    border-radius: 8px;
-    font-size: 14px;
-    cursor: pointer;
-    font-family: 'Manrope', sans-serif;
-  }
-}

@@ -2,6 +2,7 @@ import { Component, OnInit, AfterViewInit, ElementRef, ViewChild } from '@angula
 import { RouterLink } from '@angular/router';
 import { NgIf } from '@angular/common';
 import { AuthService } from '../../../core/services/auth.service';
+import { ThemeService } from '../../../core/services/theme.service';
 
 @Component({
   selector: 'app-home-page',
@@ -14,6 +15,7 @@ export class HomePageComponent implements OnInit, AfterViewInit {
   @ViewChild('codeCanvas', { static: false }) canvasRef!: ElementRef<HTMLCanvasElement>;
 
   user: any = null;
+  isDark = true;
 
   private codeBlocks = [
     { filename: 'views.py', lines: [
@@ -64,14 +66,19 @@ export class HomePageComponent implements OnInit, AfterViewInit {
   private displayLines: { text: string; color: string; done: boolean }[] = [];
   private animationId: any;
 
-  constructor(private auth: AuthService) {}
+  constructor(private auth: AuthService, private theme: ThemeService) {}
 
   ngOnInit() {
     this.auth.user$.subscribe(user => this.user = user);
+    this.theme.isDark$.subscribe(dark => this.isDark = dark);
   }
 
   ngAfterViewInit() {
     setTimeout(() => this.typeCode(), 0);
+  }
+
+  toggleTheme() {
+    this.theme.toggle();
   }
 
   typeCode() {
@@ -105,7 +112,6 @@ export class HomePageComponent implements OnInit, AfterViewInit {
 
       ctx.globalAlpha = 1;
 
-      // Курсор
       const cursorLine = this.displayLines[this.currentLine];
       const cursorTextLen = cursorLine?.text?.length || 0;
       const cursorX = startX + cursorTextLen * 7.8;
@@ -134,10 +140,8 @@ export class HomePageComponent implements OnInit, AfterViewInit {
           this.animationId = setTimeout(type, targetLine.text === '' ? 60 : 160);
         }
       } else {
-        // Блок завершено — пауза, потім fade і наступний блок
         this.animationId = setTimeout(() => {
           this.displayLines.forEach(l => l.done = true);
-
           this.animationId = setTimeout(() => {
             this.currentBlock = (this.currentBlock + 1) % this.codeBlocks.length;
             this.currentFilename = this.codeBlocks[this.currentBlock].filename;

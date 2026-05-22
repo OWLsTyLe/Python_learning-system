@@ -3,9 +3,10 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 :host {
+  transition: background 0.3s, color 0.3s;
   display: block;
-  background: #0d0f14;
-  color: #e2e8f0;
+  background: var(--bg);
+  color: var(--text);
   font-family: 'Manrope', sans-serif;
   height: 100vh;
   overflow: hidden;
@@ -17,24 +18,26 @@
   justify-content: space-between;
   padding: 0 48px;
   height: 60px;
-  border-bottom: 1px solid rgba(255,255,255,0.07);
+  border-bottom: 1px solid var(--border);
+  background: var(--navbar-bg);
+  backdrop-filter: blur(10px);
 
   .logo {
     font-family: 'JetBrains Mono', monospace;
     font-size: 18px;
     font-weight: 700;
-    color: #fff;
-    span { color: #7c6af7; }
+    color: var(--text);
+    span { color: var(--accent); }
   }
 
   .nav-links {
     display: flex;
     gap: 32px;
-    a { color: #94a3b8; font-size: 14px; text-decoration: none; font-weight: 500; }
+    a { color: var(--text-muted); font-size: 14px; text-decoration: none; font-weight: 500; }
   }
 
   .btn-login {
-    background: #7c6af7;
+    background: var(--accent);
     color: #fff;
     border: none;
     padding: 8px 20px;
@@ -43,6 +46,7 @@
     font-weight: 600;
     cursor: pointer;
     font-family: 'Manrope', sans-serif;
+    text-decoration: none;
   }
 }
 
@@ -54,7 +58,7 @@
 }
 
 .sidebar {
-  border-right: 1px solid rgba(255,255,255,0.07);
+  border-right: 1px solid var(--border);
   padding: 32px 20px;
   overflow-y: auto;
   height: 100%;
@@ -63,7 +67,7 @@
     font-size: 11px;
     font-weight: 700;
     letter-spacing: 2px;
-    color: #7c6af7;
+    color: var(--accent);
     text-transform: uppercase;
     margin-bottom: 20px;
   }
@@ -84,11 +88,17 @@
     border-radius: 8px;
     cursor: pointer;
     font-size: 14px;
-    color: #64748b;
+    color: var(--text-dim);
+    transition: background 0.15s, color 0.15s;
+
+    &:hover {
+      background: var(--bg-card-hover);
+      color: var(--text-muted);
+    }
 
     &.active {
-      background: rgba(124,106,247,0.12);
-      color: #e2e8f0;
+      background: var(--accent-light);
+      color: var(--text);
       font-weight: 600;
     }
 
@@ -97,27 +107,27 @@
 }
 
 .progress-box {
-  background: #131720;
-  border: 1px solid rgba(255,255,255,0.07);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
   border-radius: 10px;
   padding: 16px;
 
-  .progress-label { font-size: 12px; color: #64748b; margin-bottom: 10px; }
+  .progress-label { font-size: 12px; color: var(--text-dim); margin-bottom: 10px; }
 
   .progress-bar {
     height: 4px;
-    background: rgba(255,255,255,0.08);
+    background: var(--border);
     border-radius: 2px;
     margin-bottom: 8px;
 
     .progress-fill {
       height: 100%;
-      background: #7c6af7;
+      background: var(--accent);
       border-radius: 2px;
     }
   }
 
-  .progress-text { font-size: 13px; color: #a89cf8; font-weight: 600; }
+  .progress-text { font-size: 13px; color: var(--accent); font-weight: 600; }
 }
 
 .main {
@@ -130,7 +140,7 @@
 
 .lesson-meta {
   font-size: 13px;
-  color: #64748b;
+  color: var(--text-dim);
   margin-bottom: 8px;
   flex-shrink: 0;
 }
@@ -138,15 +148,15 @@
 h1 {
   font-size: 28px;
   font-weight: 800;
-  color: #fff;
+  color: var(--text);
   margin-bottom: 20px;
   flex-shrink: 0;
 }
 
 .content-block {
   flex: 1;
-  background: #131720;
-  border: 1px solid rgba(255,255,255,0.07);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
   border-radius: 12px;
   padding: 24px 32px;
   overflow-y: auto;
@@ -155,50 +165,49 @@ h1 {
   &::-webkit-scrollbar { width: 6px; }
   &::-webkit-scrollbar-track { background: transparent; }
   &::-webkit-scrollbar-thumb {
-    background: rgba(255,255,255,0.1);
+    background: var(--border);
     border-radius: 3px;
   }
 }
 
 .lesson-content {
-  .hljs { background: transparent; color: #e2e8f0; }
-  .hljs-keyword { color: #7c6af7; }
-  .hljs-built_in { color: #22d3a5; }
+  .hljs { background: transparent; color: var(--text); }
+  .hljs-keyword { color: var(--accent); }
+  .hljs-built_in { color: var(--green); }
   .hljs-string { color: #86efac; }
-  .hljs-comment { color: #475569; font-style: italic; }
-  .hljs-number { color: #f59e0b; }
-  .hljs-title { color: #22d3a5; }
-  .hljs-params { color: #e2e8f0; }
-  .hljs-attr { color: #7c6af7; }
+  .hljs-comment { color: var(--text-dimmer); font-style: italic; }
+  .hljs-number { color: var(--yellow); }
+  .hljs-title { color: var(--green); }
+  .hljs-params { color: var(--text); }
+  .hljs-attr { color: var(--accent); }
 }
+
+code {
+  background: var(--accent-light);
+  color: var(--accent);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+}
+
+pre {
+  background: var(--pre-bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 20px 24px;
+  margin: 16px 0;
+  overflow-x: auto;
+
   code {
-    background: rgba(124,106,247,0.15);
-    color: #a89cf8;
-    padding: 2px 6px;
-    border-radius: 4px;
+    background: none;
+    padding: 0;
+    color: var(--text);
     font-family: 'JetBrains Mono', monospace;
     font-size: 13px;
+    line-height: 1.8;
   }
-
-  pre {
-    background: #0d1117;
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 10px;
-    padding: 20px 24px;
-    margin: 16px 0;
-    overflow-x: auto;
-
-    code {
-      background: none;
-      padding: 0;
-      color: #e2e8f0;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 13px;
-      line-height: 1.8;
-    }
-  }
-
-
+}
 
 .nav-buttons {
   display: flex;
@@ -207,7 +216,7 @@ h1 {
   flex-shrink: 0;
 
   .btn-primary {
-    background: #7c6af7;
+    background: var(--accent);
     color: #fff;
     border: none;
     padding: 12px 24px;
@@ -221,8 +230,8 @@ h1 {
 
   .btn-outline {
     background: transparent;
-    color: #e2e8f0;
-    border: 1px solid rgba(255,255,255,0.2);
+    color: var(--text);
+    border: 1px solid var(--border);
     padding: 12px 24px;
     border-radius: 8px;
     font-size: 15px;
@@ -238,6 +247,6 @@ h1 {
   align-items: center;
   justify-content: center;
   height: 50vh;
-  color: #64748b;
+  color: var(--text-dim);
   font-size: 16px;
 }

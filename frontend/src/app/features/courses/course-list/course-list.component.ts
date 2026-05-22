@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ApiService } from '../../../core/services/api.service';
 import { AuthService } from '../../../core/services/auth.service';
+import { ThemeService } from '../../../core/services/theme.service';
 
 @Component({
   selector: 'app-course-list',
@@ -14,6 +15,7 @@ export class CourseListComponent implements OnInit {
   activeFilter = 'all';
   topics: any[] = [];
   user: any = null;
+  isDark = true;
 
   filters = [
     { id: 'all', label: 'Всі теми' },
@@ -22,15 +24,24 @@ export class CourseListComponent implements OnInit {
     { id: 'rest', label: 'REST API' },
   ];
 
-  constructor(private api: ApiService, private auth: AuthService) {}
+  constructor(
+    private api: ApiService,
+    private auth: AuthService,
+    private theme: ThemeService
+  ) {}
 
   ngOnInit() {
     this.auth.user$.subscribe(user => this.user = user);
+    this.theme.isDark$.subscribe(dark => this.isDark = dark);
     this.api.getCourses().subscribe(courses => {
       if (courses.length > 0) {
         this.topics = courses[0].topics;
       }
     });
+  }
+
+  toggleTheme() {
+    this.theme.toggle();
   }
 
   get filtered() {

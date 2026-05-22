@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { RouterLink, ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from '../../../core/services/api.service';
 import { AuthService } from '../../../core/services/auth.service';
+import { ThemeService } from '../../../core/services/theme.service';
 
 @Component({
   selector: 'app-quiz-view',
@@ -16,7 +17,7 @@ export class QuizViewComponent implements OnInit {
   selectedAnswer: number | null = null;
   showExplanation = false;
   user: any = null;
-
+  isDark = true;
   correctCount = 0;
   quizFinished = false;
 
@@ -25,21 +26,22 @@ export class QuizViewComponent implements OnInit {
     private route: ActivatedRoute,
     private auth: AuthService,
     private router: Router,
+    private theme: ThemeService
   ) {}
 
   ngOnInit() {
     this.auth.user$.subscribe(user => this.user = user);
+    this.theme.isDark$.subscribe(dark => this.isDark = dark);
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
-      this.api.getQuiz(+id).subscribe(quiz => {
-        this.quiz = quiz;
-      });
+      this.api.getQuiz(+id).subscribe(quiz => { this.quiz = quiz; });
     }
   }
 
-  get currentQuestion() {
-    return this.quiz?.questions[this.currentIndex];
-  }
+  toggleTheme() { this.theme.toggle(); }
+  logout() { this.auth.logout(); }
+
+  get currentQuestion() { return this.quiz?.questions[this.currentIndex]; }
 
   get progress() {
     if (!this.quiz) return 0;
@@ -50,10 +52,7 @@ export class QuizViewComponent implements OnInit {
     if (this.showExplanation) return;
     this.selectedAnswer = id;
     this.showExplanation = true;
-
-    if (id === this.correctAnswerId) {
-      this.correctCount++;
-    }
+    if (id === this.correctAnswerId) this.correctCount++;
   }
 
   get correctAnswerId() {
@@ -75,22 +74,13 @@ export class QuizViewComponent implements OnInit {
   finishQuiz() {
     if (this.quizFinished) return;
     this.quizFinished = true;
-
     const total = this.quiz.questions.length;
     const score = this.correctCount;
     const quizId = this.quiz.id;
     const topicId = this.quiz.topic_id ?? this.quiz.topic;
-
     this.api.completeQuiz(quizId, topicId, score, total).subscribe({
       next: () => this.router.navigate(['/dashboard']),
-      error: (err) => {
-        console.error('Помилка збереження тесту:', err);
-        this.router.navigate(['/dashboard']);
-      },
+      error: () => this.router.navigate(['/dashboard']),
     });
-  }
-
-  logout() {
-    this.auth.logout();
   }
 }
