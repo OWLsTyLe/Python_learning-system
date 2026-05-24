@@ -13,8 +13,8 @@ class TopicSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Topic
-        fields = ['id', 'title', 'description', 'icon', 'order', 'difficulty', 'lessons_count', 'lessons', 'quiz_id']
-
+        fields = ['id', 'title', 'description', 'icon', 'order', 'difficulty', 'lessons_count', 'lessons', 'quiz_id',
+                  'tag']
     def get_lessons_count(self, obj):
         return obj.lessons.count()
 

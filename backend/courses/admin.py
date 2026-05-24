@@ -1,16 +1,17 @@
 from django.contrib import admin
-from markdownx.admin import MarkdownxModelAdmin
 from .models import Course, Topic, Lesson
 
 
 class LessonInline(admin.TabularInline):
     model = Lesson
-    extra = 1
+    extra = 0
+    fields = ['title', 'order', 'duration_minutes']
 
 
 class TopicInline(admin.TabularInline):
     model = Topic
-    extra = 1
+    extra = 0
+    fields = ['title', 'icon', 'order', 'difficulty', 'tag']
 
 
 @admin.register(Course)
@@ -21,11 +22,11 @@ class CourseAdmin(admin.ModelAdmin):
 
 @admin.register(Topic)
 class TopicAdmin(admin.ModelAdmin):
-    list_display = ['title', 'course', 'difficulty', 'order']
-    list_filter = ['course', 'difficulty']
+    list_display = ['title', 'course', 'difficulty', 'tag', 'order']
+    list_filter = ['course', 'difficulty', 'tag']
     inlines = [LessonInline]
 
 
 @admin.register(Lesson)
-class LessonAdmin(MarkdownxModelAdmin):
+class LessonAdmin(admin.ModelAdmin):
     list_display = ['title', 'topic', 'order', 'duration_minutes']
