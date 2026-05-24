@@ -44,10 +44,10 @@ export class CourseListComponent implements OnInit {
     this.theme.toggle();
   }
 
-  get filtered() {
-    if (this.activeFilter === 'all') return this.topics;
-    return this.topics.filter(t => t.tag === this.activeFilter);
-  }
+get filtered() {
+  if (this.activeFilter === 'all') return this.topics;
+  return this.topics.filter(t => t.tag === this.activeFilter);
+}
 
   setFilter(id: string) {
     this.activeFilter = id;
