@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { RouterLink, ActivatedRoute } from '@angular/router';
 import { ApiService } from '../../../core/services/api.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { ThemeService } from '../../../core/services/theme.service';
@@ -27,16 +27,25 @@ export class CourseListComponent implements OnInit {
   constructor(
     private api: ApiService,
     private auth: AuthService,
-    private theme: ThemeService
+    private theme: ThemeService,
+    private route: ActivatedRoute  // ← додано
   ) {}
 
   ngOnInit() {
     this.auth.user$.subscribe(user => this.user = user);
     this.theme.isDark$.subscribe(dark => this.isDark = dark);
+
     this.api.getCourses().subscribe(courses => {
       if (courses.length > 0) {
         this.topics = courses[0].topics;
       }
+
+      // ← читаємо tag з URL після завантаження тем
+      this.route.queryParams.subscribe(params => {
+        if (params['tag']) {
+          this.activeFilter = params['tag'];
+        }
+      });
     });
   }
 
@@ -44,10 +53,10 @@ export class CourseListComponent implements OnInit {
     this.theme.toggle();
   }
 
-get filtered() {
-  if (this.activeFilter === 'all') return this.topics;
-  return this.topics.filter(t => t.tag === this.activeFilter);
-}
+  get filtered() {
+    if (this.activeFilter === 'all') return this.topics;
+    return this.topics.filter(t => t.tag === this.activeFilter);
+  }
 
   setFilter(id: string) {
     this.activeFilter = id;
