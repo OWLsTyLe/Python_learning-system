@@ -61,4 +61,10 @@ completeQuiz(quizId: number, topicId: number, score: number, total: number): Obs
     total
   });
 }
+googleAuth(token: string): Observable<{ access: string; refresh: string }> {
+  return this.http.post<{ access: string; refresh: string }>(
+    `${this.baseUrl}/auth/google/`,
+    { token }
+  );
+  }
 }

@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { ApiService } from './api.service';
 
+declare const google: any;
+
 @Injectable({
   providedIn: 'root'
 })
@@ -47,5 +49,16 @@ export class AuthService {
 
   get isLoggedIn() {
     return !!localStorage.getItem('access_token');
+  }
+
+  initGoogleLogin(callback: (credential: string) => void) {
+    google.accounts.id.initialize({
+      client_id: '867080911580-pdlpkpatierapgpm0tcs0lj6fh20ecml.apps.googleusercontent.com',
+      callback: (response: any) => callback(response.credential)
+    });
+  }
+
+  loginWithGoogle(credential: string) {
+    return this.api.googleAuth(credential);
   }
 }

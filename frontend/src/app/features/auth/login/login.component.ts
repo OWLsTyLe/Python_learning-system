@@ -76,8 +76,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
     private router: Router,
     private theme: ThemeService,
     private api: ApiService,
-  ) {
-  }
+  ) {}
 
   ngOnInit() {
     this.theme.isDark$.subscribe(dark => this.isDark = dark);
@@ -89,22 +88,32 @@ export class LoginComponent implements OnInit, AfterViewInit {
   }
 
   private initGoogle() {
-    this.auth.initGoogleLogin((credential) => {
-      this.auth.loginWithGoogle(credential).subscribe({
-        next: (res) => {
-          this.auth.setTokens(res.access, res.refresh);
-          this.api.getMe().subscribe(user => {
-            this.auth.setUser(user);
-            this.router.navigate(['/dashboard']);
+    const waitForGoogle = () => {
+      if (typeof (window as any).google !== 'undefined') {
+        this.auth.initGoogleLogin((credential) => {
+          this.auth.loginWithGoogle(credential).subscribe({
+            next: (res:{access: string; refresh: string }) => {
+              this.auth.setTokens(res.access, res.refresh);
+              this.api.getMe().subscribe(user => {
+                this.auth.setUser(user);
+                this.router.navigate(['/dashboard']);
+              });
+            },
+            error: () => {
+              this.error = 'Помилка входу через Google';
+            }
           });
-        },
-        error: () => {
-          this.error = 'Помилка входу через Google';
-        }
-      });
-    });
+        });
+      } else {
+        setTimeout(waitForGoogle, 100);
+      }
+    };
 
-    this.auth.renderGoogleButton('google-btn');
+    waitForGoogle();
+  }
+
+  onGoogleLogin() {
+    (window as any).google.accounts.id.prompt();
   }
 
   toggleTheme() {
@@ -220,24 +229,5 @@ export class LoginComponent implements OnInit, AfterViewInit {
         this.error = 'Невірний email або пароль';
       }
     });
-  }
-
-  onGoogleLogin() {
-    this.auth.initGoogleLogin((credential) => {
-      this.auth.loginWithGoogle(credential).subscribe({
-        next: (res) => {
-          this.auth.setTokens(res.access, res.refresh);
-          this.api.getMe().subscribe(user => {
-            this.auth.setUser(user);
-            this.router.navigate(['/dashboard']);
-          });
-        },
-        error: () => {
-          this.error = 'Помилка входу через Google';
-        }
-      });
-    });
-
-    (window as any).google.accounts.id.prompt();
   }
 }
