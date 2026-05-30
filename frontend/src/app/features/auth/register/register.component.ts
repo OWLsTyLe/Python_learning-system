@@ -22,6 +22,16 @@ export class RegisterComponent implements OnInit, AfterViewInit {
   error = '';
   isDark = true;
 
+  private lightMap: Record<string, string> = {
+    '#7c6af7': '#5b4dd4',
+    '#22d3a5': '#0d7a5f',
+    '#e2e8f0': '#1e293b',
+    '#94a3b8': '#475569',
+    '#f59e0b': '#b45309',
+    '#86efac': '#166534',
+    '#f87171': '#b91c1c',
+  };
+
   private codeBlocks = [
     { lines: [
       { text: 'from django.contrib.auth.models import AbstractUser', color: '#7c6af7' },
@@ -80,17 +90,30 @@ export class RegisterComponent implements OnInit, AfterViewInit {
     this.theme.toggle();
   }
 
+  private getColor(color: string): string {
+    if (!color) return this.isDark ? '#e2e8f0' : '#1e293b';
+    return this.isDark ? color : (this.lightMap[color] || '#1e293b');
+  }
+
+  private getCursorColor(): string {
+    return this.isDark ? '#7c6af7' : '#5b4dd4';
+  }
+
   typeCode() {
     const canvas = this.canvasRef.nativeElement;
     const ctx = canvas.getContext('2d')!;
 
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    const resize = () => {
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = window.innerWidth * dpr;
+      canvas.height = window.innerHeight * dpr;
+      canvas.style.width = window.innerWidth + 'px';
+      canvas.style.height = window.innerHeight + 'px';
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    };
 
-    window.addEventListener('resize', () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    });
+    resize();
+    window.addEventListener('resize', resize);
 
     const fontSize = 14;
     const lineHeight = 28;
@@ -103,8 +126,8 @@ export class RegisterComponent implements OnInit, AfterViewInit {
       this.displayLines.forEach((line, i) => {
         if (!line.text) return;
         ctx.font = `${fontSize}px JetBrains Mono, monospace`;
-        ctx.fillStyle = this.isDark ? (line.color || '#e2e8f0') : (line.color || '#1e293b');
-        ctx.globalAlpha = line.done ? 0.15 : (this.isDark ? 0.6 : 0.25);
+        ctx.fillStyle = this.getColor(line.color);
+        ctx.globalAlpha = line.done ? (this.isDark ? 0.35 : 0.45) : 1;
         ctx.fillText(line.text, startX, startY + i * lineHeight);
       });
 
@@ -113,7 +136,7 @@ export class RegisterComponent implements OnInit, AfterViewInit {
       const cursorTextLen = this.displayLines[this.currentLine]?.text?.length || 0;
       const cursorX = startX + cursorTextLen * 8.4;
       const cursorY = startY + this.currentLine * lineHeight;
-      ctx.fillStyle = '#7c6af7';
+      ctx.fillStyle = this.getCursorColor();
       ctx.globalAlpha = Math.sin(Date.now() / 250) > 0 ? 0.6 : 0;
       ctx.fillRect(cursorX, cursorY - fontSize, 2, fontSize + 4);
       ctx.globalAlpha = 1;

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewEncapsulation} from '@angular/core';
 import { RouterLink, ActivatedRoute, Router } from '@angular/router';
 import { MarkdownComponent } from 'ngx-markdown';
 import { ApiService } from '../../../core/services/api.service';
@@ -11,7 +11,8 @@ import hljs from 'highlight.js';
   standalone: true,
   imports: [RouterLink, MarkdownComponent],
   templateUrl: './lesson-view.component.html',
-  styleUrl: './lesson-view.component.scss'
+  styleUrl: './lesson-view.component.scss',
+  encapsulation: ViewEncapsulation.None
 })
 export class LessonViewComponent implements OnInit {
   lesson: any = null;

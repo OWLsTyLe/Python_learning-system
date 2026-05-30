@@ -17,6 +17,16 @@ export class HomePageComponent implements OnInit, AfterViewInit {
   user: any = null;
   isDark = true;
 
+  private darkToLight: Record<string, string> = {
+    '#7c6af7': '#5b4dd4',
+    '#22d3a5': '#0d7a5f',
+    '#e2e8f0': '#1e293b',
+    '#94a3b8': '#475569',
+    '#f59e0b': '#b45309',
+    '#86efac': '#166534',
+    '#f87171': '#b91c1c',
+  };
+
   private codeBlocks = [
     { filename: 'views.py', lines: [
       { text: 'from django.views import View', color: '#7c6af7' },
@@ -65,6 +75,7 @@ export class HomePageComponent implements OnInit, AfterViewInit {
   private currentChar = 0;
   private displayLines: { text: string; color: string; done: boolean }[] = [];
   private animationId: any;
+  private dpr = 1;
 
   constructor(private auth: AuthService, private theme: ThemeService) {}
 
@@ -81,14 +92,33 @@ export class HomePageComponent implements OnInit, AfterViewInit {
     this.theme.toggle();
   }
 
+  private getColor(color: string): string {
+    if (!color) return this.isDark ? '#e2e8f0' : '#1e293b';
+    return this.isDark ? color : (this.darkToLight[color] || '#1e293b');
+  }
+
+  private getCursorColor(): string {
+    return this.isDark ? '#7c6af7' : '#5b4dd4';
+  }
+
   typeCode() {
     const canvas = this.canvasRef.nativeElement;
     const ctx = canvas.getContext('2d')!;
 
     const resize = () => {
       const parent = canvas.parentElement!;
-      canvas.width = parent.clientWidth;
-      canvas.height = parent.clientHeight;
+      this.dpr = window.devicePixelRatio || 1;
+
+      // Фізичний розмір — чіткість на Retina
+      canvas.width = parent.clientWidth * this.dpr;
+      canvas.height = parent.clientHeight * this.dpr;
+
+      // CSS розмір — не змінюємо layout
+      canvas.style.width = parent.clientWidth + 'px';
+      canvas.style.height = parent.clientHeight + 'px';
+
+      // Масштабуємо контекст
+      ctx.setTransform(this.dpr, 0, 0, this.dpr, 0, 0);
     };
 
     resize();
@@ -105,8 +135,8 @@ export class HomePageComponent implements OnInit, AfterViewInit {
       this.displayLines.forEach((line, i) => {
         if (!line.text) return;
         ctx.font = `${fontSize}px JetBrains Mono, monospace`;
-        ctx.fillStyle = line.color || '#e2e8f0';
-        ctx.globalAlpha = line.done ? 0.25 : 1;
+        ctx.fillStyle = this.getColor(line.color);
+        ctx.globalAlpha = line.done ? (this.isDark ? 0.35 : 0.45) : 1;
         ctx.fillText(line.text, startX, startY + i * lineHeight);
       });
 
@@ -116,7 +146,7 @@ export class HomePageComponent implements OnInit, AfterViewInit {
       const cursorTextLen = cursorLine?.text?.length || 0;
       const cursorX = startX + cursorTextLen * 7.8;
       const cursorY = startY + this.currentLine * lineHeight;
-      ctx.fillStyle = '#7c6af7';
+      ctx.fillStyle = this.getCursorColor();
       ctx.globalAlpha = Math.sin(Date.now() / 250) > 0 ? 0.8 : 0;
       ctx.fillRect(cursorX, cursorY - fontSize, 2, fontSize + 4);
       ctx.globalAlpha = 1;
