@@ -1,5 +1,5 @@
 <nav class="navbar">
-  <div class="logo"><span>>_</span>PyPath</div>
+  <div class="logo" routerLink="/"><span>>_</span>PyPath</div>
   <div class="nav-links">
     <a routerLink="/">Головна</a>
     <a routerLink="/courses">Курси</a>
@@ -110,42 +110,33 @@
 
   <div class="course-grid">
 
-    <div class="course-card">
+    <div class="course-card"  [routerLink]="['/courses']" [queryParams]="{tag: 'python'}">
       <div class="card-img">🐍</div>
 
       <div class="card-body">
         <div class="card-level">Початківець</div>
         <div class="card-title">Python з нуля</div>
-
-        <div class="card-desc">
-          Змінні, функції, ООП, файли. Реальні скрипти.
-        </div>
+        <div class="card-desc">Змінні, функції, ООП, файли. Реальні скрипти.</div>
       </div>
     </div>
 
-    <div class="course-card">
+    <div class="course-card" [routerLink]="['/courses']" [queryParams]="{tag: 'django'}">
       <div class="card-img">🌱</div>
 
       <div class="card-body">
         <div class="card-level">Середній</div>
         <div class="card-title">Django: веб з нуля</div>
-
-        <div class="card-desc">
-          MVC, ORM, auth, forms. Пишемо блог-платформу.
-        </div>
+        <div class="card-desc"> MVC, ORM, auth, forms. Пишемо блог-платформу.</div>
       </div>
     </div>
 
     <div class="course-card">
       <div class="card-img">⚡</div>
 
-      <div class="card-body">
+      <div class="card-body" [routerLink]="['/courses']" [queryParams]="{tag: 'django'}">
         <div class="card-level">Просунутий</div>
         <div class="card-title">Django REST API</div>
-
-        <div class="card-desc">
-          DRF, JWT, Swagger, Docker. Деплой на сервер.
-        </div>
+        <div class="card-desc"> DRF, JWT, Swagger, Docker. Деплой на сервер.</div>
       </div>
     </div>
 
