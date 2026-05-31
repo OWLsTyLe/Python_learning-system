@@ -44,9 +44,17 @@ export class LessonViewComponent implements OnInit {
     this.theme.toggle();
   }
 
-  logout() {
-    this.auth.logout();
-  }
+showLogoutModal = false;
+
+logout() {
+  this.showLogoutModal = true;
+}
+
+confirmLogout() {
+  this.showLogoutModal = false;
+  this.auth.logout();
+}
+
 
   loadLesson(id: number) {
     this.api.getLesson(id).subscribe(lesson => {

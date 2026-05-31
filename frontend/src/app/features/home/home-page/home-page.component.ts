@@ -12,7 +12,7 @@ import { ThemeService } from '../../../core/services/theme.service';
   styleUrl: './home-page.component.scss'
 })
 export class HomePageComponent implements OnInit, AfterViewInit {
-  @ViewChild('codeCanvas', { static: false }) canvasRef!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('codeCanvas', {static: false}) canvasRef!: ElementRef<HTMLCanvasElement>;
 
   user: any = null;
   isDark = true;
@@ -28,44 +28,50 @@ export class HomePageComponent implements OnInit, AfterViewInit {
   };
 
   private codeBlocks = [
-    { filename: 'views.py', lines: [
-      { text: 'from django.views import View', color: '#7c6af7' },
-      { text: 'from .models import Course', color: '#7c6af7' },
-      { text: '', color: '' },
-      { text: 'class CourseListView(View):', color: '#22d3a5' },
-      { text: '  def get(self, request):', color: '#22d3a5' },
-      { text: '    courses = Course.objects', color: '#e2e8f0' },
-      { text: '      .filter(is_published=True)', color: '#e2e8f0' },
-      { text: '      .order_by("-created_at")', color: '#86efac' },
-      { text: '    return JsonResponse({', color: '#e2e8f0' },
-      { text: '      "courses": list(courses),', color: '#86efac' },
-      { text: '      "total": courses.count()', color: '#86efac' },
-      { text: '    })', color: '#e2e8f0' },
-    ]},
-    { filename: 'models.py', lines: [
-      { text: 'from django.db import models', color: '#7c6af7' },
-      { text: '', color: '' },
-      { text: 'class Course(models.Model):', color: '#22d3a5' },
-      { text: '  title = models.CharField(max_length=200)', color: '#e2e8f0' },
-      { text: '  description = models.TextField()', color: '#e2e8f0' },
-      { text: '  is_published = models.BooleanField()', color: '#e2e8f0' },
-      { text: '  created_at = models.DateTimeField()', color: '#e2e8f0' },
-      { text: '', color: '' },
-      { text: '  def __str__(self):', color: '#22d3a5' },
-      { text: '    return self.title', color: '#86efac' },
-    ]},
-    { filename: 'serializers.py', lines: [
-      { text: 'from rest_framework import serializers', color: '#7c6af7' },
-      { text: 'from .models import Course', color: '#7c6af7' },
-      { text: '', color: '' },
-      { text: 'class CourseSerializer(serializers.ModelSerializer):', color: '#22d3a5' },
-      { text: '  class Meta:', color: '#f59e0b' },
-      { text: '    model = Course', color: '#e2e8f0' },
-      { text: '    fields = [', color: '#e2e8f0' },
-      { text: '      "id", "title",', color: '#86efac' },
-      { text: '      "description", "is_published"', color: '#86efac' },
-      { text: '    ]', color: '#e2e8f0' },
-    ]},
+    {
+      filename: 'views.py', lines: [
+        {text: 'from django.views import View', color: '#7c6af7'},
+        {text: 'from .models import Course', color: '#7c6af7'},
+        {text: '', color: ''},
+        {text: 'class CourseListView(View):', color: '#22d3a5'},
+        {text: '  def get(self, request):', color: '#22d3a5'},
+        {text: '    courses = Course.objects', color: '#e2e8f0'},
+        {text: '      .filter(is_published=True)', color: '#e2e8f0'},
+        {text: '      .order_by("-created_at")', color: '#86efac'},
+        {text: '    return JsonResponse({', color: '#e2e8f0'},
+        {text: '      "courses": list(courses),', color: '#86efac'},
+        {text: '      "total": courses.count()', color: '#86efac'},
+        {text: '    })', color: '#e2e8f0'},
+      ]
+    },
+    {
+      filename: 'models.py', lines: [
+        {text: 'from django.db import models', color: '#7c6af7'},
+        {text: '', color: ''},
+        {text: 'class Course(models.Model):', color: '#22d3a5'},
+        {text: '  title = models.CharField(max_length=200)', color: '#e2e8f0'},
+        {text: '  description = models.TextField()', color: '#e2e8f0'},
+        {text: '  is_published = models.BooleanField()', color: '#e2e8f0'},
+        {text: '  created_at = models.DateTimeField()', color: '#e2e8f0'},
+        {text: '', color: ''},
+        {text: '  def __str__(self):', color: '#22d3a5'},
+        {text: '    return self.title', color: '#86efac'},
+      ]
+    },
+    {
+      filename: 'serializers.py', lines: [
+        {text: 'from rest_framework import serializers', color: '#7c6af7'},
+        {text: 'from .models import Course', color: '#7c6af7'},
+        {text: '', color: ''},
+        {text: 'class CourseSerializer(serializers.ModelSerializer):', color: '#22d3a5'},
+        {text: '  class Meta:', color: '#f59e0b'},
+        {text: '    model = Course', color: '#e2e8f0'},
+        {text: '    fields = [', color: '#e2e8f0'},
+        {text: '      "id", "title",', color: '#86efac'},
+        {text: '      "description", "is_published"', color: '#86efac'},
+        {text: '    ]', color: '#e2e8f0'},
+      ]
+    },
   ];
 
   currentFilename = 'views.py';
@@ -77,7 +83,8 @@ export class HomePageComponent implements OnInit, AfterViewInit {
   private animationId: any;
   private dpr = 1;
 
-  constructor(private auth: AuthService, private theme: ThemeService) {}
+  constructor(private auth: AuthService, private theme: ThemeService) {
+  }
 
   ngOnInit() {
     this.auth.user$.subscribe(user => this.user = user);
@@ -157,7 +164,7 @@ export class HomePageComponent implements OnInit, AfterViewInit {
         const targetLine = block.lines[this.currentLine];
 
         if (!this.displayLines[this.currentLine]) {
-          this.displayLines[this.currentLine] = { text: '', color: targetLine.color, done: false };
+          this.displayLines[this.currentLine] = {text: '', color: targetLine.color, done: false};
         }
 
         if (this.currentChar < targetLine.text.length) {
@@ -187,7 +194,15 @@ export class HomePageComponent implements OnInit, AfterViewInit {
     type();
   }
 
-  logout() {
-    this.auth.logout();
-  }
+showLogoutModal = false;
+
+logout() {
+  this.showLogoutModal = true;
 }
+
+confirmLogout() {
+  this.showLogoutModal = false;
+  this.auth.logout();
+}
+}
+

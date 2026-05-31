@@ -94,3 +94,16 @@
     }
   </div>
 }
+@if (showLogoutModal) {
+  <div class="modal-overlay" (click)="showLogoutModal = false">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <div class="modal-icon">👋</div>
+      <h3>Виходити?</h3>
+      <p>Твій прогрес збережено. Повертайся!</p>
+      <div class="modal-btns">
+        <button class="modal-cancel" (click)="showLogoutModal = false">Скасувати</button>
+        <button class="modal-confirm" (click)="confirmLogout()">Вийти</button>
+      </div>
+    </div>
+  </div>
+}

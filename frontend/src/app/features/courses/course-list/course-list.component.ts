@@ -66,7 +66,15 @@ export class CourseListComponent implements OnInit {
     return this.topics.length ? Math.round((3 / this.topics.length) * 100) : 0;
   }
 
-  logout() {
-    this.auth.logout();
-  }
+
+  showLogoutModal = false;
+
+logout() {
+  this.showLogoutModal = true;
+}
+
+confirmLogout() {
+  this.showLogoutModal = false;
+  this.auth.logout();
+}
 }

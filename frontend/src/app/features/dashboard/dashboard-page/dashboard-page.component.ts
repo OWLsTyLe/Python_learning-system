@@ -147,5 +147,14 @@ export class DashboardPageComponent implements OnInit {
     return this.user?.username || this.user?.email?.split('@')[0] || 'Користувач';
   }
 
-  logout() { this.auth.logout(); }
+  showLogoutModal = false;
+
+logout() {
+  this.showLogoutModal = true;
+}
+
+confirmLogout() {
+  this.showLogoutModal = false;
+  this.auth.logout();
+}
 }

@@ -7,24 +7,30 @@
     <a href="#">Спільнота</a>
   </div>
   <div class="navbar-right">
-    <button class="theme-toggle" (click)="toggleTheme()" [title]="isDark ? 'Світла тема' : 'Темна тема'">
+    <button (click)="toggleTheme()" [title]="isDark ? 'Світла тема' : 'Темна тема'" class="theme-toggle">
       @if (isDark) {
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
-          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
-          <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
-          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="5"/>
+          <line x1="12" y1="1" x2="12" y2="3"/>
+          <line x1="12" y1="21" x2="12" y2="23"/>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+          <line x1="1" y1="12" x2="3" y2="12"/>
+          <line x1="21" y1="12" x2="23" y2="12"/>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
         </svg>
       }
       @if (!isDark) {
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
         </svg>
       }
     </button>
     @if (user) {
       <div class="user-menu">
-<!--        <span class="username">{{ user.username }}</span>-->
         <button class="btn-logout" (click)="logout()">Вийти</button>
       </div>
     }
@@ -36,109 +42,164 @@
 
 <div class="hero">
   <div class="hero-left">
-
     <div class="badge">
       <span class="badge-dot"></span>
       12 000+ студентів вже навчаються
     </div>
-
     <h1>
       Від нуля до<br>
       <span class="py">Python</span> та<br>
       <span class="dj">Django</span> розробника
     </h1>
-
     <p class="subtitle">
       Практичні курси з живим кодом, менторами і реальними
       проєктами у портфоліо. Вчись у зручному темпі.
     </p>
-
     <div class="cta-row">
-      <button class="btn-primary" routerLink="/auth/register">
-        Почати безкоштовно
-      </button>
-
-      <button class="btn-outline" routerLink="/courses">
-        Переглянути курси →
-      </button>
+      <button class="btn-primary" routerLink="/auth/register">Почати безкоштовно</button>
+      <button class="btn-outline" routerLink="/courses">Переглянути курси →</button>
     </div>
-
     <div class="stats">
-
       <div class="stat">
         <div class="stat-val">48+</div>
         <div class="stat-label">годин відео</div>
       </div>
-
       <div class="stat">
         <div class="stat-val">200+</div>
         <div class="stat-label">практичних задач</div>
       </div>
-
       <div class="stat">
         <div class="stat-val">94%</div>
         <div class="stat-label">завершують курс</div>
       </div>
-
     </div>
   </div>
 
   <div class="code-window">
-
     <div class="code-header">
       <span class="dot red"></span>
       <span class="dot yellow"></span>
       <span class="dot green"></span>
-
-      <span class="filename">
-        {{ currentFilename }}
-      </span>
+      <span class="filename">{{ currentFilename }}</span>
     </div>
-
     <div class="canvas-wrap">
       <canvas #codeCanvas></canvas>
     </div>
-
   </div>
 </div>
 
 <section class="courses-section">
-
-  <div class="section-label">
-    Програма
-  </div>
-
+  <div class="section-label">Програма</div>
   <div class="course-grid">
 
-    <div class="course-card"  [routerLink]="['/courses']" [queryParams]="{tag: 'python'}">
-      <div class="card-img">🐍</div>
-
+    <div [queryParams]="{tag: 'python'}" [routerLink]="['/courses']" class="course-card">
+      <div class="card-img">
+        <svg fill="none" height="56" viewBox="0 0 56 56" width="56" xmlns="http://www.w3.org/2000/svg">
+          <rect fill="#1a2a3a" height="56" rx="12" width="56"/>
+          <path
+            d="M28 8C20 8 16 11.5 16 16v4h12v2H13C9 22 6 25 6 30s3 8 7 9l2 .5V36c0-3 2.5-5 7-5h12c4.5 0 7-2.5 7-6V16c0-4.5-4-8-13-8zm-3 5.5a2 2 0 110 4 2 2 0 010-4z"
+            fill="#3776ab"/>
+          <path
+            d="M28 48c8 0 12-3.5 12-8v-4H28v-2h15c4 0 7-3 7-8s-3-8-7-9l-2-.5V20c0 3-2.5 5-7 5H22c-4.5 0-7 2.5-7 6v10c0 4.5 4 8 13 8zm3-5.5a2 2 0 110-4 2 2 0 010 4z"
+            fill="#ffd43b"/>
+        </svg>
+      </div>
       <div class="card-body">
+        <div class="card-tag python">Python</div>
         <div class="card-level">Початківець</div>
         <div class="card-title">Python з нуля</div>
         <div class="card-desc">Змінні, функції, ООП, файли. Реальні скрипти.</div>
+        <div class="card-footer">
+          <span>5 тем</span>
+          <span class="card-arrow">→</span>
+        </div>
       </div>
     </div>
 
-    <div class="course-card" [routerLink]="['/courses']" [queryParams]="{tag: 'django'}">
-      <div class="card-img">🌱</div>
-
+    <div [queryParams]="{tag: 'django'}" [routerLink]="['/courses']" class="course-card">
+      <div class="card-img">
+        <svg fill="none" height="52" viewBox="0 0 48 48" width="52" xmlns="http://www.w3.org/2000/svg">
+          <rect fill="#092e20" height="48" rx="10" width="48"/>
+          <path d="M20 10h5v22c0 5-2 7-7 8l-2-4c3-1 4-2 4-5V10zM27 10h5v5h-5zM27 18h5v20h-5z" fill="white"/>
+        </svg>
+      </div>
       <div class="card-body">
+        <div class="card-tag django">Django</div>
         <div class="card-level">Середній</div>
         <div class="card-title">Django: веб з нуля</div>
-        <div class="card-desc"> MVC, ORM, auth, forms. Пишемо блог-платформу.</div>
+        <div class="card-desc">MVC, ORM, auth, forms. Пишемо блог-платформу.</div>
+        <div class="card-footer">
+          <span>3 теми</span>
+          <span class="card-arrow">→</span>
+        </div>
       </div>
     </div>
 
-    <div class="course-card">
-      <div class="card-img">⚡</div>
-
-      <div class="card-body" [routerLink]="['/courses']" [queryParams]="{tag: 'django'}">
+    <div [queryParams]="{tag: 'django'}" [routerLink]="['/courses']" class="course-card">
+      <div class="card-img">
+        <svg fill="none" height="56" viewBox="0 0 56 56" width="56" xmlns="http://www.w3.org/2000/svg">
+          <rect fill="#12112a" height="56" rx="12" width="56"/>
+          <rect fill="#7c6af7" height="8" rx="3" width="12" x="8" y="24"/>
+          <rect fill="#7c6af7" height="8" rx="3" width="12" x="36" y="24"/>
+          <rect fill="#22d3a5" height="8" rx="3" width="12" x="22" y="8"/>
+          <rect fill="#22d3a5" height="8" rx="3" width="12" x="22" y="40"/>
+          <line stroke="#7c6af7" stroke-dasharray="3 2" stroke-width="1.5" x1="20" x2="36" y1="28" y2="28"/>
+          <line stroke="#22d3a5" stroke-dasharray="3 2" stroke-width="1.5" x1="28" x2="28" y1="16" y2="24"/>
+          <line stroke="#22d3a5" stroke-dasharray="3 2" stroke-width="1.5" x1="28" x2="28" y1="32" y2="40"/>
+          <circle cx="28" cy="28" fill="#1e1b4b" r="5" stroke="#7c6af7" stroke-width="2"/>
+          <circle cx="28" cy="28" fill="#7c6af7" r="2"/>
+        </svg>
+      </div>
+      <div class="card-body">
+        <div class="card-tag rest">REST API</div>
         <div class="card-level">Просунутий</div>
         <div class="card-title">Django REST API</div>
-        <div class="card-desc"> DRF, JWT, Swagger, Docker. Деплой на сервер.</div>
+        <div class="card-desc">DRF, JWT, Swagger, Docker. Деплой на сервер.</div>
+        <div class="card-footer">
+          <span>Незабаром</span>
+          <span>🔒</span>
+        </div>
       </div>
     </div>
 
   </div>
 </section>
+
+<section class="how-section">
+  <div class="section-label">Як це працює</div>
+  <div class="how-grid">
+    <div class="how-card">
+      <div class="how-num" style="color: #a78bfa; opacity: 1;">01</div>
+      <div class="how-title">Обираєш тему</div>
+      <div class="how-desc">Починай з Python або одразу з Django — обирай свій рівень і темп.</div>
+    </div>
+    <div class="how-card">
+      <div class="how-num" style="color: #a78bfa; opacity: 1;">02</div>
+      <div class="how-title">Читаєш і практикуєш</div>
+      <div class="how-desc">Кожен урок має теорію з прикладами коду і завдання для закріплення.</div>
+    </div>
+    <div class="how-card">
+      <div class="how-num" style="color: #a78bfa; opacity: 1;">03</div>
+      <div class="how-title">Проходиш тест</div>
+      <div class="how-desc">Після кожної теми — квіз щоб перевірити розуміння матеріалу.</div>
+    </div>
+    <div class="how-card">
+      <div class="how-num" style="color: #a78bfa; opacity: 1;">04</div>
+      <div class="how-title">Відстежуєш прогрес</div>
+      <div class="how-desc">Дашборд показує скільки ти пройшов і що ще попереду.</div>
+    </div>
+  </div>
+</section>
+@if (showLogoutModal) {
+  <div class="modal-overlay" (click)="showLogoutModal = false">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <div class="modal-icon">👋</div>
+      <h3>Виходити?</h3>
+      <p>Твій прогрес збережено. Повертайся!</p>
+      <div class="modal-btns">
+        <button class="modal-cancel" (click)="showLogoutModal = false">Скасувати</button>
+        <button class="modal-confirm" (click)="confirmLogout()">Вийти</button>
+      </div>
+    </div>
+  </div>
+}

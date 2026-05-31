@@ -39,7 +39,18 @@ export class QuizViewComponent implements OnInit {
   }
 
   toggleTheme() { this.theme.toggle(); }
-  logout() { this.auth.logout(); }
+
+showLogoutModal = false;
+
+logout() {
+  this.showLogoutModal = true;
+}
+
+confirmLogout() {
+  this.showLogoutModal = false;
+  this.auth.logout();
+}
+
 
   get currentQuestion() { return this.quiz?.questions[this.currentIndex]; }
 
