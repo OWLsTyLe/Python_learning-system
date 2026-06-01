@@ -28,7 +28,7 @@ export class CourseListComponent implements OnInit {
     private api: ApiService,
     private auth: AuthService,
     private theme: ThemeService,
-    private route: ActivatedRoute  // ← додано
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit() {
@@ -40,7 +40,6 @@ export class CourseListComponent implements OnInit {
         this.topics = courses[0].topics;
       }
 
-      // ← читаємо tag з URL після завантаження тем
       this.route.queryParams.subscribe(params => {
         if (params['tag']) {
           this.activeFilter = params['tag'];

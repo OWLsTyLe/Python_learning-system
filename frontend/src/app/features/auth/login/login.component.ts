@@ -112,9 +112,16 @@ export class LoginComponent implements OnInit, AfterViewInit {
     waitForGoogle();
   }
 
-  onGoogleLogin() {
-    (window as any).google.accounts.id.prompt();
-  }
+ private googlePromptOpen = false;
+
+onGoogleLogin() {
+  if (this.googlePromptOpen) return;
+  this.googlePromptOpen = true;
+
+  (window as any).google.accounts.id.prompt((notification: any) => {
+    this.googlePromptOpen = false;
+  });
+}
 
   toggleTheme() {
     this.theme.toggle();
