@@ -151,7 +151,8 @@ UNFOLD = {
     "SITE_URL": "http://localhost:4200",
     "SITE_ICON": None,
     "DASHBOARD_CALLBACK": None,
-    "SHOW_THEME_SWITCH": True,
+
+
     "LOGIN": {
         "image": None,
         "redirect_after": None,
