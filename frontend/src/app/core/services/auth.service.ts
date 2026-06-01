@@ -11,11 +11,18 @@ declare const google: any;
 export class AuthService {
   private userSubject = new BehaviorSubject<any>(null);
   user$ = this.userSubject.asObservable();
+  private googleInitialized = false;
 
   constructor(private api: ApiService, private router: Router) {
     const token = localStorage.getItem('access_token');
     if (token) {
-      this.api.getMe().subscribe(user => this.userSubject.next(user));
+      this.api.getMe().subscribe({
+        next: user => this.userSubject.next(user),
+        error: () => {
+          localStorage.removeItem('access_token');
+          localStorage.removeItem('refresh_token');
+        }
+      });
     }
   }
 
@@ -52,6 +59,9 @@ export class AuthService {
   }
 
   initGoogleLogin(callback: (credential: string) => void) {
+    if (this.googleInitialized) return;
+    this.googleInitialized = true;
+
     google.accounts.id.initialize({
       client_id: '867080911580-pdlpkpatierapgpm0tcs0lj6fh20ecml.apps.googleusercontent.com',
       callback: (response: any) => callback(response.credential)
